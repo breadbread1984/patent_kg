@@ -118,7 +118,8 @@ class Qwen2_5(ChatHuggingFace2):
         temperature = 0.8,
         do_sample = False
       ),
-      tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-1.5B-Instruct'),
+      # tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-1.5B-Instruct'),
+      tokenizer=AutoTokenizer.from_pretrained('Qwen/Qwen2.5-7B-Instruct'),
       verbose = True
     )
 
