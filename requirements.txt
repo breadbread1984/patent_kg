@@ -1,6 +1,6 @@
 torch
 torchtext
-torchvision
+#torchvision
 torch-geometric
 langchain>=0.3.9
 langchain-core>=0.3.21
