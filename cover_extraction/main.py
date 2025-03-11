@@ -62,7 +62,7 @@ def main(unused_argv):
       driver.execute_query('merge (a: Patent {patent_num: $pno, patent_name: $pnm}) return a;', pno = info['patent_num'], pnm = info['patent_name'], database_ = neo4j_db)
       if 'applicant' in info:
         driver.execute_query('merge (a: Applicant {name: $name}) return a;', name = info['applicant'], database_ = neo4j_db)
-        driver.execute_query('match (a: Patent {patent_num: $pno}), (b: Applicant {name: $name}) merge (a)<-[:APPLY]-(b);', pno = info['patent_num'], pnm = info['patent_name'], database_ = neo4j_db)
+        driver.execute_query('match (a: Patent {patent_num: $pno}), (b: Applicant {name: $name}) merge (a)<-[:APPLY]-(b);', pno = info['patent_num'], name = info['applicant'], database_ = neo4j_db)
       if 'inventors' in info and len(info['inventors']):
         for inventor in info['inventors']:
           driver.execute_query('merge (a: Inventor {name: $name}) return a;', name = inventor, database_ = neo4j_db)
