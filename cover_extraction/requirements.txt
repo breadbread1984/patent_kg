@@ -1,0 +1,10 @@
+absl-py
+mupdf
+json-repair
+numpy
+neo4j
+opencv-python
+openai
+dashscope
+huggingface_hub
+transformers
