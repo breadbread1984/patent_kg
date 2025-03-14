@@ -31,7 +31,7 @@ def main(unused_argv):
     for f in files:
       stem, ext = splitext(f)
       if ext != '.pdf': continue
-      loader = UnstructuredPDFLoader(join(root, f), mode = 'single', strategy = 'hi_res', languages = {'en', 'zh-cn', 'zh-tw'})
+      loader = UnstructuredPDFLoader(join(root, f), mode = 'single', strategy = 'hi_res', languages = ["chi_tra", "chi_sim", "eng"])
       docs = loader.load()
       for page_num, doc in enumerate(docs):
         doc.metadata['page_num'] = page_num
