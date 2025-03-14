@@ -61,6 +61,16 @@ class GPT4O(ChatOpenAI):
       api_key = openai_api_key,
     )
 
+class Tongyi(ChatOpenAI):
+  def __init__(self,):
+    super(ChatOpenAI, self).__init__(
+      api_key = '',
+      base_url = "https://dashscope.aliyuncs.com/compatible-mode/v1",
+      model_name = 'qwen2.5-7b-instruct',
+      top_p = 0.8,
+      temperature = 0.8,
+    )
+
 class Campus(ChatOpenAI):
   def __init__(self,):
     super(ChatOpenAI, self).__init__(
