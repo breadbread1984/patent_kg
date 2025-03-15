@@ -4,6 +4,7 @@ from langchain.agents import load_tools, AgentExecutor
 from langchain.agents.format_scratchpad import format_log_to_str
 from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 from langchain.tools.render import render_text_description
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_neo4j import Neo4jVector
 from models import Llama3_2, Qwen2_5, GPT35Turbo, GPT4O, Campus, Tongyi
 from tools import load_chunk_retriever, load_document_retriever
@@ -20,6 +21,7 @@ class Agent(object):
       'tongyi': Tongyi
     }
     llm = llms_types[model]()
+    embedding = HuggingFaceEmbeddings(model_name = "intfloat/multilingual-e5-base")
     vectordb = Neo4jVector(
       embedding = embedding,
       url = kwargs.get('host'),

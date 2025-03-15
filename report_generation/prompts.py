@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from langchain_core.prompts import ChatPromptTemplate, MessagePlaceholder
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
 react_prompt = ChatPromptTemplate.from_messages([
   ('system', """You are a report generation assistant tasked with producing a well-formatted context given parsed context.
