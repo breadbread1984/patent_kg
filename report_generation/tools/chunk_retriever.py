@@ -8,6 +8,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.retrievers import ParentDocumentRetriever
 from langchain_neo4j import Neo4jVector
 from langchain.callbacks.manager import CallbackManagerForToolRun
+from langchain.retrievers import MultiVectorRetriever
 
 def load_chunk_retriever(vectordb, store):
   class ChunkRetrieverInput(BaseModel):

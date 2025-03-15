@@ -8,6 +8,7 @@ from langchain_core.documents import Document
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.retrievers import ParentDocumentRetriever
 from langchain.callbacks.manager import CallbackManagerForToolRun
+from langchain.retrievers import MultiVectorRetriever
 
 def load_document_retriever(vectordb, store):
   class DocumentRetrieverInput(BaseModel):
