@@ -30,7 +30,6 @@ def create_interface():
     database = neo4j_db,
     index_name = "chunk_vectordb",
     search_type = "hybrid",
-    pre_delete_collection = True
   )
   chunk_store = LocalFileStore(FLAGS.chunk_dir)
   document_vectordb = Neo4jVector(
@@ -41,7 +40,6 @@ def create_interface():
     database = neo4j_db,
     index_name = "document_vectordb",
     search_type = "hybrid",
-    pre_delete_collection = True
   )
   doc_store = LocalFileStore(FLAGS.doc_dir)
   agent = Agent(model = FLAGS.model, chunk_vectordb, chunk_store, document_vectordb, doc_store)
