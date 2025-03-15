@@ -65,8 +65,9 @@ def main(unused_argv):
       if ext != '.pdf': continue
       loader = UnstructuredPDFLoader(join(root, f), mode = 'single', strategy = 'hi_res', languages = ["chi_tra", "chi_sim", "eng"])
       docs = loader.load()
-      chunk_retriever.add_documents(docs)
-      doc_retriever.add_documents(docs)
+      if len(docs):
+        chunk_retriever.add_documents(docs)
+        doc_retriever.add_documents(docs)
 
 if __name__ == "__main__":
   add_options()
