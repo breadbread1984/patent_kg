@@ -42,7 +42,7 @@ def create_interface():
     search_type = "hybrid",
   )
   doc_store = LocalFileStore(FLAGS.doc_dir)
-  agent = Agent(model = FLAGS.model, chunk_vectordb, chunk_store, document_vectordb, doc_store)
+  agent = Agent(FLAGS.model, chunk_vectordb, chunk_store, document_vectordb, doc_store)
   def chatbot_response(user_input, history):
     chat_history = list()
     for human, ai in history:

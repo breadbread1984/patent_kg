@@ -11,7 +11,7 @@ from tools import load_chunk_retriever, load_document_retriever
 from prompts import react_prompt
 
 class Agent(object):
-  def __init__(self, model = 'llama3', chunk_vectordb, chunk_store, doc_vectordb, doc_store):
+  def __init__(self, model, chunk_vectordb, chunk_store, doc_vectordb, doc_store):
     llms_types = {
       'llama3': Llama3_2,
       'qwen2': Qwen2_5,
