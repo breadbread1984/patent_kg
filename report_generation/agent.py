@@ -11,7 +11,7 @@ from tools import load_chunk_retriever, load_document_retriever
 from prompts import react_prompt
 
 class Agent(object):
-  def __init__(self, model = 'llama3', **kwargs):
+  def __init__(self, model = 'llama3', chunk_vectordb, chunk_store, doc_vectordb, doc_store):
     llms_types = {
       'llama3': Llama3_2,
       'qwen2': Qwen2_5,
@@ -21,18 +21,8 @@ class Agent(object):
       'tongyi': Tongyi
     }
     llm = llms_types[model]()
-    embedding = HuggingFaceEmbeddings(model_name = "intfloat/multilingual-e5-base")
-    vectordb = Neo4jVector(
-      embedding = embedding,
-      url = kwargs.get('host'),
-      username = kwargs.get('username'),
-      password = kwargs.get('password'),
-      database = kwargs.get('db'),
-      index_name = "typical_rag",
-      search_type = "hybrid"
-    )
-    tools = [load_chunk_retriever(vectordb),
-             load_document_retriever(vectordb)]
+    tools = [load_chunk_retriever(chunk_vectordb, chunk_store),
+             load_document_retriever(doc_vectordb, doc_store)]
     prompt = react_prompt
     # adapt prompt to openai's preference
     if model in ['gpt3.5', 'gpt4o']:
