@@ -56,7 +56,7 @@ def main(unused_argv):
   doc_store = LocalFileStore(FLAGS.doc_dir)
   doc_retriever = ParentDocumentRetriever(
     vectorstore = document_vectordb,
-    docstore = doc_store,
+    docstore = create_kv_docstore(doc_store),
     child_splitter = child_splitter,
   )
   for root, dirs, files in tqdm(walk(FLAGS.input_dir)):
