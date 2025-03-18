@@ -30,10 +30,21 @@ class ChatHuggingFace2(ChatHuggingFace):
   ):
     # ordinary LLM inference
     llm_input = self._to_chat_prompt(messages, **kwargs)
-    llm_result = self.llm._generate(
-      prompts=[llm_input], stop=stop, run_manager=run_manager, **kwargs
-    )
+    print("LLM Input:", llm_input)
+    try:
+      supported_kwargs = {k: v for k, v in kwargs.items() if k not in ["tools", "tool_choice"]}
+      llm_result = self.llm._generate(
+        prompts=[llm_input], stop=stop, run_manager=run_manager, **supported_kwargs
+      )
+      # # llm_result = self.llm._generate(
+      #     prompts=[llm_input], stop=stop, run_manager=run_manager, **kwargs
+      # )
+      print("LLM Result:", llm_result)
+    except Exception as e:
+      print(f"Error during LLM generation: {e}")
+      raise
     generations = self._to_chat_result(llm_result)
+    print("Raw LLM Generations:", generations.generations[0].message.content)
     # NOTE: if the query is about tool calling, parse the result
     if 'tools' in kwargs:
       try:
@@ -46,10 +57,12 @@ class ChatHuggingFace2(ChatHuggingFace):
       if type(tool_calls) is dict:
         tool_calls = [tool_calls]
       generations.generations[0].message.content = ''
+      print("Tool Calls:", tool_calls)
       for call in tool_calls:
         generations.generations[0].message.tool_calls.append({
           'name': call['name'],
-          'args': call['parameters'],
+          # 'args': call['parameters'],
+          'args': call['arguments'],
           'id': f'call_{self.generate_random_sequence()}'
         })
     return generations
@@ -118,7 +131,8 @@ class Qwen2_5(ChatHuggingFace2):
         temperature = 0.8,
         do_sample = False
       ),
-      tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-1.5B-Instruct'),
+      # tokenizer = AutoTokenizer.from_pretrained('Qwen/Qwen2.5-1.5B-Instruct'),
+      tokenizer=AutoTokenizer.from_pretrained('Qwen/Qwen2.5-7B-Instruct'),
       verbose = True
     )
 
@@ -167,6 +181,7 @@ if __name__ == "__main__":
     return a * b
 
   chat_model = Llama3_2()
+  # chat_model = Qwen2_5()
   tools = [add, multiply]
   if False:
     prompt = hub.pull("hwchase17/openai-functions-agent")
