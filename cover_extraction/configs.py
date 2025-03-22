@@ -1,8 +1,8 @@
 #!/usr/bin/python3
 
-dashscope_api_key = 'sk-88f509096c9f45c79f16cad6adbba753'
+dashscope_api_key = ''
 tgi_host = "http://localhost:8080"
-huggingface_api_key = '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'
+huggingface_api_key = ''
 host = "0.0.0.0"
 port = 8081
 
