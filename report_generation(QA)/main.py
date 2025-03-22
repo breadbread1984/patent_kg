@@ -3,6 +3,13 @@
 from absl import flags, app
 import gradio as gr
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_neo4j import Neo4jVector
+from langchain_huggingface import HuggingFaceEmbeddings
+from langchain.document_loaders import UnstructuredPDFLoader
+from langchain.storage import LocalFileStore
+from langchain.storage._lc_store import create_kv_docstore
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.retrievers import ParentDocumentRetriever
 from agent import Agent
 from configs import *
 
@@ -10,9 +17,32 @@ FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_enum('model', default = 'tongyi', enum_values = {'llama3', 'qwen2', 'gpt3.5', 'gpt4o', 'campus', 'tongyi'}, help = 'model to use')
+  flags.DEFINE_string('chunk_dir', default = 'chunks', help = 'path to chunks')
+  flags.DEFINE_string('doc_dir', default = 'docs', help = 'path to docs')
 
 def create_interface():
-  agent = Agent(model = FLAGS.model, host = neo4j_host, username = neo4j_user, password = neo4j_password, db = neo4j_db)
+  embedding = HuggingFaceEmbeddings(model_name = "intfloat/multilingual-e5-base")
+  chunk_vectordb = Neo4jVector(
+    embedding = embedding,
+    url = neo4j_host,
+    username = neo4j_user,
+    password = neo4j_password,
+    database = neo4j_db,
+    index_name = "chunk_vectordb",
+    search_type = "hybrid",
+  )
+  chunk_store = LocalFileStore(FLAGS.chunk_dir)
+  document_vectordb = Neo4jVector(
+    embedding = embedding,
+    url = neo4j_host,
+    username = neo4j_user,
+    password = neo4j_password,
+    database = neo4j_db,
+    index_name = "document_vectordb",
+    search_type = "hybrid",
+  )
+  doc_store = LocalFileStore(FLAGS.doc_dir)
+  agent = Agent(FLAGS.model, chunk_vectordb, chunk_store, document_vectordb, doc_store)
   def chatbot_response(user_input, history):
     chat_history = list()
     for human, ai in history:
