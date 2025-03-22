@@ -7,7 +7,7 @@ from langchain.tools.render import render_text_description
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_neo4j import Neo4jVector
 from models import Llama3_2, Qwen2_5, GPT35Turbo, GPT4O, Campus, Tongyi
-from tools import load_chunk_retriever, load_document_retriever
+from tools import load_chunk_retriever, load_document_retriever, load_patent_metadata_qa
 from prompts import react_prompt
 
 class Agent(object):
@@ -22,7 +22,8 @@ class Agent(object):
     }
     llm = llms_types[model]()
     tools = [load_chunk_retriever(chunk_vectordb, chunk_store),
-             load_document_retriever(doc_vectordb, doc_store)]
+             load_document_retriever(doc_vectordb, doc_store),
+             load_patent_metadata_qa(llm),]
     prompt = react_prompt
     # adapt prompt to openai's preference
     if model in ['gpt3.5', 'gpt4o']:
