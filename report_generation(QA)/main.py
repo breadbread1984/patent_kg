@@ -51,10 +51,9 @@ def create_interface():
     for event in graph.stream({'messages': chat_history}):
       if 'chatbot' in event:
         messages = event['chatbot']['messages']
-        history[-1].content = messages[-1].content
-    return "", history, history
+        history[-1]['content'] = messages[-1].content
+    return "", history
   with gr.Blocks() as demo:
-    state = gr.State([])
     with gr.Row(equal_height = True):
       with gr.Column(scale = 15):
         gr.Markdown("<h1><center>QA System</center></h1>")
@@ -67,8 +66,8 @@ def create_interface():
         with gr.Row():
           clear_btn = gr.ClearButton(components = [chatbot, state], value = "清空问题")
       submit_btn.click(chatbot_response,
-                       inputs = [user_input, state],
-                       outputs = [user_input, state, chatbot])
+                       inputs = [user_input, chatbot],
+                       outputs = [user_input, chatbot])
   return demo
 
 def main(unused_argv):
