@@ -32,7 +32,8 @@ def load_patent_metadata_qa(llm):
     graph = graph,
     llm = llm,
     verbose = True,
-    allow_dangerous_requests = True
+    allow_dangerous_requests = True,
+    return_direct = True
   )
   return PatentMetadataQATool(config = PatentMetadataQAConfig(chain = chain))
 
