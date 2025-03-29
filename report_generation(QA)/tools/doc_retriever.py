@@ -10,6 +10,7 @@ from langchain.retrievers import ParentDocumentRetriever
 from langchain.callbacks.manager import CallbackManagerForToolRun
 from langchain.retrievers import MultiVectorRetriever
 from langchain.storage._lc_store import create_kv_docstore
+from langsmith import traceable
 
 def load_document_retriever(vectordb, store):
   class DocumentRetrieverInput(BaseModel):
@@ -25,6 +26,7 @@ def load_document_retriever(vectordb, store):
     description: str = 'ONLY use for research questions that may require searching over entire research reports. Will be slower and more expensive than chunk-level retrieval but may be necessary.'
     args_schema: Type[BaseModel] = DocumentRetrieverInput
     config: DocumentRetrieverConfig
+    @traceable
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> DocumentRetrieverOutput:
       docs = self.config.retriever.invoke(query)
       return DocumentRetrieverOutput(chunks = docs)

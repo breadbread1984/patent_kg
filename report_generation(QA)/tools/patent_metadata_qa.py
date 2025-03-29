@@ -7,6 +7,7 @@ from langchain.callbacks.manager import CallbackManagerForToolRun
 from langchain.tools import StructuredTool
 from langchain_neo4j import Neo4jGraph
 from langchain_neo4j import GraphCypherQAChain
+from langsmith import traceable
 from configs import *
 
 def load_patent_metadata_qa(llm):
@@ -23,6 +24,7 @@ def load_patent_metadata_qa(llm):
     description: str = "tool for answering question about patent metadata"
     args_schema: Type[BaseModel] = PatentMetadataQAInput
     config: PatentMetadataQAConfig
+    @traceable
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> PatentMetadataQAOutput:
       response = self.config.chain.invoke(query)
       return PatentMetadataQAOutput(response = response['result'])
