@@ -8,7 +8,7 @@ from langchain.agents.output_parsers import ReActJsonSingleInputOutputParser
 from langchain.tools.render import render_text_description
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_neo4j import Neo4jVector
-from langsmith import traceable, client
+from langsmith import traceable, Client
 from models import Llama3_2, Qwen2_5, GPT35Turbo, GPT4O, Campus, Tongyi
 from tools import load_chunk_retriever, load_document_retriever, load_patent_metadata_qa
 from prompts import react_prompt
