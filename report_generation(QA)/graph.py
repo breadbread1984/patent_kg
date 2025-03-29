@@ -13,7 +13,7 @@ from configs import *
 class State(TypedDict):
   messages: list
 
-def get_graph(chunk_vectordb, chunk_store, document_vectordb, doc_store):
+def get_graph(chunk_vectordb, chunk_store, doc_vectordb, doc_store):
   environ['LANGSMITH_TRACING'] = langsmith_trace
   environ['LANGSMITH_API_KEY'] = langsmith_api_key
   environ['LANGSMITH_PROJECT'] = 'patent report'
