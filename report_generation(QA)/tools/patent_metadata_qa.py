@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-from typing import Type, Optional
+from typing import List, Type, Optional
 from pydantic import BaseModel, Field
 from langchain_core.runnables import Runnable
 from langchain.callbacks.manager import CallbackManagerForToolRun
@@ -13,7 +13,7 @@ def load_patent_metadata_qa(llm):
   class PatentMetadataQAInput(BaseModel):
     query: str = Field(description = 'query about patents, applicants, inventors, assignees and their relationships')
   class PatentMetadataQAOutput(BaseModel):
-    response: dict = Field(description = 'query results')
+    response: List[dict] = Field(description = 'query results')
   class PatentMetadataQAConfig(BaseModel):
     class Config:
       arbitrary_types_allowed = True
