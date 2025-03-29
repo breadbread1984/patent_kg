@@ -16,3 +16,6 @@ openai_api_key = '' # FIXME: fill in the api key
 campus_api_key = '' # FIXME: fill in the api key
 
 tgi_host = 'http://localhost:8080'
+
+langsmith_trace = 'true'
+langsmith_api_key = ''
