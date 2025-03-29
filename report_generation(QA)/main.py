@@ -50,7 +50,7 @@ def create_interface():
     history.append({'role': 'assistant', 'content': ''})
     for event in graph.stream({'messages': chat_history}):
       if 'chatbot' in event:
-        messages = event.message['messages']
+        messages = event['chatbot']['messages']
         history[-1].content = messages[-1].content
     return "", history, history
   with gr.Blocks() as demo:
