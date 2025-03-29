@@ -64,7 +64,7 @@ def create_interface():
         with gr.Row():
           submit_btn = gr.Button("发送")
         with gr.Row():
-          clear_btn = gr.ClearButton(components = [chatbot, state], value = "清空问题")
+          clear_btn = gr.ClearButton(components = [chatbot], value = "清空问题")
       submit_btn.click(chatbot_response,
                        inputs = [user_input, chatbot],
                        outputs = [user_input, chatbot])
