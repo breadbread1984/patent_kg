@@ -10,7 +10,6 @@ from langchain_neo4j import Neo4jVector
 from langchain.callbacks.manager import CallbackManagerForToolRun
 from langchain.retrievers import MultiVectorRetriever
 from langchain.storage._lc_store import create_kv_docstore
-from langsmith import traceable
 
 def load_chunk_retriever(vectordb, store):
   class ChunkRetrieverInput(BaseModel):
@@ -26,7 +25,6 @@ def load_chunk_retriever(vectordb, store):
     description: str = "ONLY use for research questions that want to look up specific facts from the knowledge corpus, and don't need entire documents."
     args_schema: Type[BaseModel] = ChunkRetrieverInput
     config: ChunkRetrieverConfig
-    @traceable
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> ChunkRetrieverOutput:
       docs = self.config.retriever.invoke(query)
       return ChunkRetrieverOutput(chunks = docs)
