@@ -21,7 +21,7 @@ def load_chunk_retriever(vectordb, store):
       arbitrary_types_allowed = True
     retriever: MultiVectorRetriever
   class ChunkRetrieverTool(StructuredTool):
-    name: str = "Retrieves a small set of relevant document chunks from the corpus."
+    name: str = "document_chunk_retriever"
     description: str = "ONLY use for research questions that want to look up specific facts from the knowledge corpus, and don't need entire documents."
     args_schema: Type[BaseModel] = ChunkRetrieverInput
     config: ChunkRetrieverConfig

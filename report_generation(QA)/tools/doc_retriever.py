@@ -21,7 +21,7 @@ def load_document_retriever(vectordb, store):
       arbitrary_types_allowed = True
     retriever: MultiVectorRetriever
   class DocumentRetrieverTool(StructuredTool):
-    name: str = 'Document retriever that retrieves entire documents from the corpus.'
+    name: str = 'document_fulltext_retriever'
     description: str = 'ONLY use for research questions that may require searching over entire research reports. Will be slower and more expensive than chunk-level retrieval but may be necessary.'
     args_schema: Type[BaseModel] = DocumentRetrieverInput
     config: DocumentRetrieverConfig
