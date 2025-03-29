@@ -3,7 +3,7 @@
 from absl import flags, app
 import gradio as gr
 from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
-from langchain_neo4j import Neo4jVector
+from langchain.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.storage import LocalFileStore
@@ -23,25 +23,9 @@ def add_options():
 
 def create_interface():
   embedding = HuggingFaceEmbeddings(model_name = "intfloat/multilingual-e5-base")
-  chunk_vectordb = Neo4jVector(
-    embedding = embedding,
-    url = neo4j_host,
-    username = neo4j_user,
-    password = neo4j_password,
-    database = neo4j_db,
-    index_name = "chunk_vectordb",
-    search_type = "hybrid",
-  )
+  chunk_vectordb = Chroma(embedding_function = embedding, persist_directory = 'chunk_vectordb')
   chunk_store = LocalFileStore(FLAGS.chunk_dir)
-  document_vectordb = Neo4jVector(
-    embedding = embedding,
-    url = neo4j_host,
-    username = neo4j_user,
-    password = neo4j_password,
-    database = neo4j_db,
-    index_name = "document_vectordb",
-    search_type = "hybrid",
-  )
+  document_vectordb = Chroma(embedding_function = embedding, persist_directory = 'document_vectordb')
   doc_store = LocalFileStore(FLAGS.doc_dir)
   graph = get_graph(chunk_vectordb, chunk_store, document_vectordb, doc_store)
   def chatbot_response(user_input, history):
