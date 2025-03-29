@@ -13,7 +13,7 @@ def load_patent_metadata_qa(llm):
   class PatentMetadataQAInput(BaseModel):
     query: str = Field(description = 'query about patents, applicants, inventors, assignees and their relationships')
   class PatentMetadataQAOutput(BaseModel):
-    response: str = Field(description = 'answer to the question')
+    response: dict = Field(description = 'query results')
   class PatentMetadataQAConfig(BaseModel):
     class Config:
       arbitrary_types_allowed = True
