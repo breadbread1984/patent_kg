@@ -21,9 +21,9 @@ class BasicToolNode(object):
         tool_call["args"]
       )
       if tool_call['name'] == 'document_chunk_retriever':
-        tool_result = tool_result.chunks
+        tool_result = [{'page_content': result.page_content, 'metadata': result.metadata} for result in tool_result.chunks]
       elif tool_call['name'] == 'document_fulltext_retriever':
-        tool_result = tool_result.chunks
+        tool_result = [{'page_content': result.page_content, 'metadata': result.metadata} for result in tool_result.chunks]
       elif tool_call['name'] == 'patent_metadata_query':
         tool_result = tool_result.response
       outputs.append(
