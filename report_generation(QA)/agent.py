@@ -19,8 +19,8 @@ class Agent(object):
     environ['LANGSMITH_TRACING'] = langsmith_trace
     environ['LANGSMITH_API_KEY'] = langsmith_api_key
     environ['LANGSMITH_PROJECT'] = 'patent report'
-    client = Client()
-    client.create_feedback(str(uuid.uuid4()), key = 'user-score', score = 1.0)
+    self.client = Client()
+    self.client.create_feedback(str(uuid.uuid4()), key = 'user-score', score = 1.0)
     llms_types = {
       'llama3': Llama3_2,
       'qwen2': Qwen2_5,
