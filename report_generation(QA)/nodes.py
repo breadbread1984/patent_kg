@@ -2,6 +2,7 @@
 
 from langchain_core.messages import ToolMessage
 from langsmith import traceable
+import json
 import tools
 
 class BasicToolNode(object):
