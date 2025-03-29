@@ -10,13 +10,14 @@ from langchain.storage import LocalFileStore
 from langchain.storage._lc_store import create_kv_docstore
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain.retrievers import ParentDocumentRetriever
-from agent import Agent
+from graph import get_graph
 from configs import *
 
 FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_enum('model', default = 'tongyi', enum_values = {'llama3', 'qwen2', 'gpt3.5', 'gpt4o', 'campus', 'tongyi'}, help = 'model to use')
+  flags.DEFINE_integer('context_length', default = 5, help = 'content length')
   flags.DEFINE_string('chunk_dir', default = 'chunks', help = 'path to chunks')
   flags.DEFINE_string('doc_dir', default = 'docs', help = 'path to docs')
 
@@ -42,15 +43,15 @@ def create_interface():
     search_type = "hybrid",
   )
   doc_store = LocalFileStore(FLAGS.doc_dir)
-  agent = Agent(FLAGS.model, chunk_vectordb, chunk_store, document_vectordb, doc_store)
+  graph = get_graph(chunk_vectordb, chunk_store, document_vectordb, doc_store)
   def chatbot_response(user_input, history):
-    chat_history = list()
-    for human, ai in history:
-      chat_history.append(HumanMessage(content = human))
-      chat_history.append(AIMessage(content = ai))
-    chat_history = chat_history[-max_history_len * 2:]
-    response = agent.query(user_input, chat_history)
-    history.append((user_input, response['output']))
+    chat_history = history[-2 * FLAGS.context_length:]
+    chat_history.append({'role': 'user', 'content': user_input})
+    for event in graph.stream({'messages': chat_history}):
+      current_node = event.target_node
+      if current_node.is_end_node:
+        messages = event.message['messages']
+        history.append(messages[-1])
     return "", history, history
   with gr.Blocks() as demo:
     state = gr.State([])
@@ -59,7 +60,7 @@ def create_interface():
         gr.Markdown("<h1><center>QA System</center></h1>")
     with gr.Row():
       with gr.Column(scale = 4):
-        chatbot = gr.Chatbot(height = 450, show_copy_button = True)
+        chatbot = gr.Chatbot(type = "messages", height = 450, show_copy_button = True)
         user_input = gr.Textbox(label = '需要问什么？')
         with gr.Row():
           submit_btn = gr.Button("发送")
