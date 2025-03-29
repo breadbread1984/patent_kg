@@ -47,11 +47,11 @@ def create_interface():
   def chatbot_response(user_input, history):
     chat_history = history[-2 * FLAGS.context_length:]
     chat_history.append({'role': 'user', 'content': user_input})
+    history.append({'role': 'assistant', 'content': ''})
     for event in graph.stream({'messages': chat_history}):
-      current_node = event.target_node
-      if current_node.is_end_node:
+      if 'chatbot' in event:
         messages = event.message['messages']
-        history.append(messages[-1])
+        history[-1].content = messages[-1].content
     return "", history, history
   with gr.Blocks() as demo:
     state = gr.State([])
