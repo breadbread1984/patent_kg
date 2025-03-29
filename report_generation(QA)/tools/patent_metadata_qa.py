@@ -11,7 +11,7 @@ from configs import *
 
 def load_patent_metadata_qa(llm):
   class PatentMetadataQAInput(BaseModel):
-    query: str = Field(description = 'question about patent metadata')
+    query: str = Field(description = 'the original full question about patent metadata')
   class PatentMetadataQAOutput(BaseModel):
     response: str = Field(description = 'answer to the question')
   class PatentMetadataQAConfig(BaseModel):
