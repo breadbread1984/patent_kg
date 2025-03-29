@@ -11,7 +11,7 @@ from .configs import *
 
 def load_patent_metadata_qa(llm):
   class PatentMetadataQAInput(BaseModel):
-    query: str = Field(description = 'the original full question about patent metadata')
+    query: str = Field(description = 'query about patents, applicants, inventors, assignees and their relationships')
   class PatentMetadataQAOutput(BaseModel):
     response: str = Field(description = 'answer to the question')
   class PatentMetadataQAConfig(BaseModel):
@@ -20,7 +20,7 @@ def load_patent_metadata_qa(llm):
     chain: Runnable
   class PatentMetadataQATool(StructuredTool):
     name: str = "patent_metadata_query"
-    description: str = "tool for answering question about patent metadata"
+    description: str = "tool for answer Patents, Applicants, Inventors, Assignees and their relationships related questions."
     args_schema: Type[BaseModel] = PatentMetadataQAInput
     config: PatentMetadataQAConfig
     def _run(self, query: str, run_manager: Optional[CallbackManagerForToolRun] = None) -> PatentMetadataQAOutput:
