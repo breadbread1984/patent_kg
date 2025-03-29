@@ -20,6 +20,12 @@ class BasicToolNode(object):
       tool_result = self.tools_by_name[tool_call["name"]].invoke(
         tool_call["args"]
       )
+      if tool_call['name'] == 'document_chunk_retriever':
+        tool_result = tool_result.chunks
+      elif tool_call['name'] == 'document_fulltext_retriever':
+        tool_result = tool_result.chunks
+      elif tool_call['name'] == 'patent_metadata_query':
+        tool_result = tool_result.response
       outputs.append(
         ToolMessage(
           content=json.dumps(tool_result),
