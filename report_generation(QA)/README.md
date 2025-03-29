@@ -47,4 +47,4 @@ python3 load_graphdb.py --input_dir patents
 python3 main.py
 ```
 
-try to ask agent a question such as "Help me generate a report analyzing the LoftQ experimental techniques" to start the report assembling process.
+try to ask agent a question such as "Help me generate a report analyzing the apparatus for facilitating a photovoltaic device to provide a wireless communication channel." to start the report assembling process.
