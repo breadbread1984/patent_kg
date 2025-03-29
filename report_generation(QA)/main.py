@@ -31,6 +31,7 @@ def create_interface():
   def chatbot_response(user_input, history):
     chat_history = history[-2 * FLAGS.context_length:]
     chat_history.append({'role': 'user', 'content': user_input})
+    history.append({'role': 'user', 'content': user_input})
     history.append({'role': 'assistant', 'content': ''})
     for event in graph.stream({'messages': chat_history}):
       if 'chatbot' in event:
