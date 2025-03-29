@@ -7,7 +7,7 @@ from langchain.callbacks.manager import CallbackManagerForToolRun
 from langchain.tools import StructuredTool
 from langchain_neo4j import Neo4jGraph
 from langchain_neo4j import GraphCypherQAChain
-from configs import *
+from .configs import *
 
 def load_patent_metadata_qa(llm):
   class PatentMetadataQAInput(BaseModel):
