@@ -5,7 +5,7 @@ from os import walk, environ
 from os.path import exists, join, splitext
 from tqdm import tqdm
 import fitz # pymupdf
-from langchain_neo4j import Neo4jVector
+from langchain.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 from langchain.document_loaders import UnstructuredPDFLoader
 from langchain.storage import LocalFileStore
@@ -26,16 +26,7 @@ def main(unused_argv):
   embedding = HuggingFaceEmbeddings(model_name = "intfloat/multilingual-e5-base")
   child_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 50)
   parent_splitter = RecursiveCharacterTextSplitter(chunk_size = 2000, chunk_overlap = 200)
-  chunk_vectordb = Neo4jVector(
-    embedding = embedding,
-    url = neo4j_host,
-    username = neo4j_user,
-    password = neo4j_password,
-    database = neo4j_db,
-    index_name = "chunk_vectordb",
-    search_type = "hybrid",
-    pre_delete_collection = True
-  )
+  chunk_vectordb = Chroma(embedding_function = embedding, persist_directory = 'chunk_vectordb')
   chunk_store = LocalFileStore(FLAGS.chunk_dir)
   chunk_retriever = ParentDocumentRetriever(
     vectorstore = chunk_vectordb,
@@ -43,16 +34,7 @@ def main(unused_argv):
     child_splitter = child_splitter,
     parent_splitter = parent_splitter
   )
-  document_vectordb = Neo4jVector(
-    embedding = embedding,
-    url = neo4j_host,
-    username = neo4j_user,
-    password = neo4j_password,
-    database = neo4j_db,
-    index_name = "document_vectordb",
-    search_type = "hybrid",
-    pre_delete_collection = True
-  )
+  document_vectordb = Chroma(embedding_function = embedding, persist_directory = 'document_vectordb')
   doc_store = LocalFileStore(FLAGS.doc_dir)
   doc_retriever = ParentDocumentRetriever(
     vectorstore = document_vectordb,
