@@ -12,21 +12,17 @@ from langchain_neo4j import Neo4jGraph
 from langchain_experimental.graph_transformers.llm import LLMGraphTransformer
 from configs import neo4j_host, neo4j_user, neo4j_password, neo4j_db, node_types, rel_types
 from prompts import extract_triplets_template
-from models import Llama3_2, Qwen2_5
+from models import Tongyi
 
 FLAGS = flags.FLAGS
 
 def add_options():
   flags.DEFINE_string('input_dir', default = None, help = 'path to directory')
   flags.DEFINE_boolean('split', default = False, help = 'whether to split document')
-  flags.DEFINE_enum('model', default = 'qwen2', enum_values = {'llama3', 'qwen2'}, help = 'which LLM to use')
 
 def main(unused_argv):
   prompt = extract_triplets_template(node_types, rel_types)
-  llm = {
-    'llama3': Llama3_2,
-    'qwen2': Qwen2_5
-  }[FLAGS.model]()
+  llm = Tongyi()
   graph_transformer = LLMGraphTransformer(
     llm = llm,
     prompt = prompt,
