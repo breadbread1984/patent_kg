@@ -10,8 +10,7 @@ from langchain.document_loaders import UnstructuredPDFLoader, UnstructuredHTMLLo
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_neo4j import Neo4jGraph
 from langchain_experimental.graph_transformers.llm import LLMGraphTransformer
-from configs import neo4j_host, neo4j_user, neo4j_password, neo4j_db, node_types, rel_types
-from prompts import extract_triplets_template
+from configs import neo4j_host, neo4j_user, neo4j_password, neo4j_db
 from models import Tongyi
 
 FLAGS = flags.FLAGS
@@ -21,13 +20,9 @@ def add_options():
   flags.DEFINE_boolean('split', default = False, help = 'whether to split document')
 
 def main(unused_argv):
-  prompt = extract_triplets_template(node_types, rel_types)
   llm = Tongyi()
   graph_transformer = LLMGraphTransformer(
     llm = llm,
-    prompt = prompt,
-    allowed_nodes = node_types,
-    allowed_relationships = rel_types,
   )
   neo4j = Neo4jGraph(url = neo4j_host, username = neo4j_user, password = neo4j_password, database = neo4j_db)
   if FLAGS.split:
