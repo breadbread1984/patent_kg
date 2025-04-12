@@ -37,5 +37,5 @@ docker run --gpus all --shm-size 1g -e CUDA_VISIBLE_DEVICES=4,5,6,7 -p 8080:80 -
 ## Load documents into graph database
 
 ```shell
-python3 load_graphdb.py --input_dir patents
+python3 load_graphdb.py --input_dir patents [--model (llm|diffbot|relik|gliner)] [--api (tgi|dashscope)] [--split]
 ```
