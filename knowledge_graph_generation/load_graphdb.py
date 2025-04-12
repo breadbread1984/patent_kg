@@ -19,12 +19,18 @@ FLAGS = flags.FLAGS
 def add_options():
   flags.DEFINE_string('input_dir', default = None, help = 'path to directory')
   flags.DEFINE_boolean('split', default = False, help = 'whether to split document')
+  flags.DEFINE_enum('api', default = 'tgi', enum_values = {'tgi', 'dashscope'}, help = 'which api to use')
   flags.DEFINE_enum('model', default = 'llm', enum_values = {'llm', 'diffbot', 'relik', 'gliner'}, help = 'model type')
 
 def main(unused_argv):
   if FLAGS.model == 'llm':
-    llm = Qwen2_5()
-    graph_transformer = LLMGraphTransformer(llm = llm,)
+    if FLAGS.api == 'tgi':
+      llm = Qwen2_5()
+    elif FLAGS.api == 'dashscope':
+      llm = Tongyi()
+    else:
+      raise Exception('unknown api!')
+    graph_transformer = LLMGraphTransformer(llm = llm, ignore_tool_usage = True)
   elif FLAGS.model == 'diffbot':
     graph_transformer = DiffbotGraphTransformer(diffbot_api_key = diffbot_api_key)
   elif FLAGS.model == 'relik':
