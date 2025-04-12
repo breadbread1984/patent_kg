@@ -12,7 +12,7 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter
 from langchain_neo4j import Neo4jGraph
 from langchain_experimental.graph_transformers import LLMGraphTransformer, DiffbotGraphTransformer, RelikGraphTransformer, GlinerGraphTransformer
 from configs import *
-from models import Tongyi
+from models import *
 
 FLAGS = flags.FLAGS
 
@@ -23,7 +23,7 @@ def add_options():
 
 def main(unused_argv):
   if FLAGS.model == 'llm':
-    llm = Tongyi()
+    llm = Qwen2_5()
     graph_transformer = LLMGraphTransformer(llm = llm,)
   elif FLAGS.model == 'diffbot':
     graph_transformer = DiffbotGraphTransformer(diffbot_api_key = diffbot_api_key)
