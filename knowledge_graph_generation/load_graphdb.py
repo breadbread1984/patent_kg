@@ -5,6 +5,7 @@ from os.path import splitext, join, exists
 from absl import flags, app
 from tqdm import tqdm
 import json
+from neo4j import GraphDatabase
 from transformers import AutoTokenizer
 from langchain.document_loaders import UnstructuredPDFLoader, UnstructuredHTMLLoader, TextLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -32,6 +33,12 @@ def main(unused_argv):
     graph_transformer = GlinerGraphTransformer()
   else:
     raise Exception('unknown graph transformer type!')
+  driver = GraphDatabase.driver(neo4j_host, auth = (neo4j_user, neo4j_password))
+  with driver.session() as session:
+    db_exists = session.run("show databases").data()
+    if not any(db['name'] == neo4j_db for db in db_exists):
+      session.run(f"create database {neo4j_db}")
+  driver.close()
   neo4j = Neo4jGraph(url = neo4j_host, username = neo4j_user, password = neo4j_password, database = neo4j_db)
   if FLAGS.split:
     text_splitter = RecursiveCharacterTextSplitter(chunk_size = 500, chunk_overlap = 50)
@@ -50,6 +57,7 @@ def main(unused_argv):
       if FLAGS.split:
         docs = text_splitter.split_documents(docs)
       graph = graph_transformer.convert_to_graph_documents(docs)
+      print(graph)
       neo4j.add_graph_documents(graph)
 
 if __name__ == "__main__":
