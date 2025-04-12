@@ -22,8 +22,8 @@ def add_options():
   flags.DEFINE_enum('model', default = 'llm', enum_values = {'llm', 'diffbot', 'relik', 'gliner'}, help = 'model type')
 
 def main(unused_argv):
-  llm = Tongyi()
   if FLAGS.model == 'llm':
+    llm = Tongyi()
     graph_transformer = LLMGraphTransformer(llm = llm,)
   elif FLAGS.model == 'diffbot':
     graph_transformer = DiffbotGraphTransformer(diffbot_api_key = diffbot_api_key)
