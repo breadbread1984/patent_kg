@@ -4,6 +4,7 @@ from os import environ
 from langchain_openai import ChatOpenAI
 from langchain_huggingface import ChatHuggingFace
 from langchain_community.llms import HuggingFaceTextGenInference
+import configs
 
 class Tongyi(ChatOpenAI):
   def __init__(self,):
