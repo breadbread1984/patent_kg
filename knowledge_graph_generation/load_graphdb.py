@@ -35,7 +35,6 @@ def main(unused_argv):
     raise Exception('unknown graph transformer type!')
   driver = GraphDatabase.driver(neo4j_host, auth = (neo4j_user, neo4j_password))
   with driver.session() as session:
-    session.run("ALTER CURRENT USER SET PASSWORD FROM 'neo4j' TO '12345678'")
     db_exists = session.run("show databases").data()
     if not any(db['name'] == neo4j_db for db in db_exists):
       session.run(f"create database {neo4j_db}")
